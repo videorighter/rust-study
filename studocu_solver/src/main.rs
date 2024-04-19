@@ -1,7 +1,11 @@
+use std::io;
+
+// 9x9 ë°°ì—´ ì €ì¥ êµ¬ì¡°ì²´
 struct Sudoku {
     grid: [[u8; 9]; 9],
 }
 
+// 
 fn new_sudoku(numbers: &[u8; 81]) -> Sudoku {
     let mut grid = [[0; 9]; 9];
     for (index, &number) in numbers.iter().enumerate() {
@@ -62,9 +66,21 @@ fn solve_sudoku(sudoku: &mut Sudoku) -> bool {
 }
 
 fn main() {
-    let numbers: [u8; 81] = [
-        // 81°³ ¼ıÀÚ ÀÔ·Â
-    ];
+    println!("Please enter a 81-digit number representing the Sudoku puzzle:");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    input = input.trim().to_string();  // Remove any extra whitespace
+
+    if input.len() != 81 {
+        println!("Invalid input length. Please ensure it's exactly 81 digits long.");
+        return;
+    }
+
+    let mut numbers: [u8; 81] = [0; 81];
+    for (i, char) in input.chars().enumerate() {
+        numbers[i] = char.to_digit(10).expect("Invalid character") as u8;
+    }
+
     let mut sudoku = new_sudoku(&numbers);
     if solve_sudoku(&mut sudoku) {
         print_sudoku(&sudoku);
